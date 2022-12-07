@@ -19,7 +19,9 @@ SET email = CONCAT(YEAR(NOW()), ".", REPLACE(name, " ", ""), ".", DOB, "@school.
 
 -- ID = <enrolled_year>-<index_but_has_prefix_0_if_not_contains_3_digits>
 UPDATE student_hold
-SET ID = CONCAT(YEAR(NOW()), "-", LPAD(INDEX_KEY, 3, "0")) WHERE INDEX_KEY > 0;
+-- get the last student ID of the current year if exist and increment by 1 for the next student
+SET ID = CONCAT(YEAR(NOW()), "-", LPAD(CAST(SUBSTRING_INDEX(ID, '-', -1) + 1 AS CHAR), 3, '0'))
+WHERE INDEX_KEY > 0 AND ID LIKE CONCAT(YEAR(NOW()), "-%");
 
 -- enroll_year = current year
 UPDATE student_hold

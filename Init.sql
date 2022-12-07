@@ -3,6 +3,10 @@ CREATE DATABASE school;
 
 USE school;
 
+-- Student can only read their own data and information about the courses/lectures they are enrolled in
+-- Teacher can read/write their own data and information about the courses/lectures they are teaching
+-- Admin can read/write everything
+
 CREATE TABLE student_hold (
     INDEX_KEY INT NOT NULL AUTO_INCREMENT,
     ID VARCHAR(20),
@@ -11,9 +15,9 @@ CREATE TABLE student_hold (
     address VARCHAR(100) NOT NULL,
     gender VARCHAR(10) NOT NULL,
     email VARCHAR(50),
-    enroll_year INT NOT NULL,
+    enroll_year INT,
     major VARCHAR(100) NOT NULL,
-    PRIMARY KEY (INDEX_KEY)
+    PRIMARY KEY (INDEX_KEY),
 );
 
 CREATE TABLE student (

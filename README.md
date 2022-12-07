@@ -1,7 +1,7 @@
 # Todo List
-- [x] Add a student detail.
-- [ ] Delete a student detail.
-- [ ] Modify a student detail.
+- [x] Add a student/lecturer/course.
+- [ ] Delete a student/lecturer/course.
+- [ ] Modify a student/lecturer/course.
 - [ ] Find student by any field.
 - [ ] Get list of student by year/major/course.
 - [ ] Get list of student can apply for scholarship.
@@ -12,9 +12,11 @@
 
 - `Init.sql`
 
-# Insert some data
-## Student
-### Insert to a temporary table
+# Features
+## Add a new entry to the tables
+
+### Student
+#### Insert to a temporary table
 ```sql
 INSERT INTO student_hold (name, DOB, address, gender) VALUES
 ("Trần Thảo Nhật", "7-5-2003", "205 Ninh Bình", "M"),
@@ -29,13 +31,13 @@ INSERT INTO student_hold (name, DOB, address, gender) VALUES
 ("Nguyễn Khánh Hiếu", "7-7-2003", "232 Phú Yên", "M");
 ```
 
-### Process the `student_hold`
+#### Process the `student_hold`
 - `Process.sql` (sort by name to add `ID` based on the order and `email`)
 
-### Add everything back to the main `student` table then clear the temporary table
+#### Add everything back to the main `student` table then clear the temporary table
 - `Update.sql`
 
-## Lecturer
+### Lecturer
 ```sql
 INSERT INTO lecturer (lecturer_ID, name, email, phone) VALUES
 ("NVA_ICT_LAB", "Nguyen Van A", "nva@usth.edu.vn", "0123456789"),
@@ -44,7 +46,7 @@ INSERT INTO lecturer (lecturer_ID, name, email, phone) VALUES
 ("NVD_FLC", "Nguyen Van D", "nvd@usth.edu.vn", "0123456786");
 ```
 
-## Course
+### Course
 ```sql
 INSERT INTO course (ID, name, attendence_weight, midterm_weight, final_weight, lecturer_ID, course_year) VALUES
 ("12FUN_DATA", "Fundamental of Database", 10, 30, 60, "NVA_ICT_LAB", 2021),
@@ -52,4 +54,50 @@ INSERT INTO course (ID, name, attendence_weight, midterm_weight, final_weight, l
 ("12FUN_MATH", "Fundamental of Mathematics", 10, 30, 60, "NVC_MATH_LAB", 2021),
 ("12ENG_LIS", "English Listening", 10, 30, 60, "NVD_FLC", 2021),
 ("12ENG_SPK", "English Speaking", 10, 30, 60, "NVD_FLC", 2021);
+```
+
+## Delete an entry from the tables
+```sql
+DELETE FROM student WHERE ID = "2022-001";
+DELETE FROM lecturer WHERE lecturer_ID = "NVA_ICT_LAB";
+```
+
+## Modify an entry from the tables
+```sql
+UPDATE student SET name = "Nguyen Van A" WHERE ID = "2022-001";
+UPDATE lecturer SET name = "Nguyen Van A" WHERE lecturer_ID = "NVA_ICT_LAB";
+UPDATE course SET name = "Basic of Database" WHERE ID = "12FUN_DATA";
+```
+
+## Find student by any field
+```sql
+SELECT * FROM student WHERE ID = "2022-001";
+SELECT * FROM student WHERE name = "Nguyen Van A";
+SELECT * FROM student WHERE SUBSTRING(DOB, 4, 2) = "03";
+```
+
+## Get list of student by year/major/course
+```sql
+SELECT * FROM student WHERE SUBSTRING(ID, 1, 4) = "2022";
+SELECT * FROM student WHERE SUBSTRING(ID, 6, 3) = "ICT";
+SELECT * FROM student WHERE ID IN (SELECT student_ID FROM student_course WHERE course_ID = "12FUN_DATA");
+```
+
+## Get list of student can apply for scholarship
+- Calculate the average score of each course for each student based on the weight
+- Calculate the average score of each student based on the average score of each course
+- Get the list of student whose average score is greater than 15 and no single course score is less than 10
+
+```sql
+SELECT * FROM student WHERE ID IN (
+    SELECT student_ID FROM (
+        SELECT student_ID, AVG(score) AS avg_score FROM (
+            SELECT student_ID, course_ID, attendence_score * attendence_weight / 100 + midterm_score * midterm_weight / 100 + final_score * final_weight / 100 AS score FROM student_course
+        ) AS temp GROUP BY student_ID
+    ) AS temp2 WHERE avg_score > 15 AND student_ID NOT IN (
+        SELECT student_ID FROM (
+            SELECT student_ID, course_ID, attendence_score * attendence_weight / 100 + midterm_score * midterm_weight / 100 + final_score * final_weight / 100 AS score FROM student_course
+        ) AS temp3 WHERE score < 10
+    )
+);
 ```
