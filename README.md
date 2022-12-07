@@ -1,5 +1,5 @@
 # Todo List
-- [ ] Add a student detail.
+- [x] Add a student detail.
 - [ ] Delete a student detail.
 - [ ] Modify a student detail.
 - [ ] Find student by any field.
