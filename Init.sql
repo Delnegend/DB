@@ -11,8 +11,8 @@ CREATE TABLE student_hold (
     address VARCHAR(100) NOT NULL,
     gender VARCHAR(10) NOT NULL,
     email VARCHAR(50),
-    enroll_year INT,
-    major VARCHAR(100),
+    enroll_year INT NOT NULL,
+    major VARCHAR(100) NOT NULL,
     PRIMARY KEY (INDEX_KEY)
 );
 
