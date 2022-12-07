@@ -43,9 +43,9 @@ CREATE TABLE grade (
     ID INT NOT NULL AUTO_INCREMENT,
     student_id VARCHAR(8) NOT NULL,
     course_id VARCHAR(50) NOT NULL,
-    attendence INT NOT NULL,
-    midterm INT NOT NULL,
-    final INT NOT NULL,
+    attendence INT,
+    midterm INT,
+    final INT,
     PRIMARY KEY (ID)
 );
 
