@@ -1,10 +1,10 @@
 # Todo List
 - [x] Add a student/lecturer/course.
-- [ ] Delete a student/lecturer/course.
-- [ ] Modify a student/lecturer/course.
-- [ ] Find student by any field.
-- [ ] Get list of student by year/major/course.
-- [ ] Get list of student can apply for scholarship.
+- [x] Delete a student/lecturer/course.
+- [x] Modify a student/lecturer/course.
+- [x] Find student by any field.
+- [x] Get list of student by year/major/course.
+- [x] Get list of student can apply for scholarship.
 - [ ] Role based access control.
 - [ ] Attendance.
 
