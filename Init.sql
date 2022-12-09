@@ -17,7 +17,7 @@ CREATE TABLE student_hold (
     email VARCHAR(50),
     enroll_year INT,
     major VARCHAR(100) NOT NULL,
-    PRIMARY KEY (INDEX_KEY),
+    PRIMARY KEY (INDEX_KEY)
 );
 
 CREATE TABLE student (
@@ -64,3 +64,12 @@ CREATE TABLE lecturer (
 ALTER TABLE grade ADD CONSTRAINT student_id FOREIGN KEY (student_id) REFERENCES student(ID);
 ALTER TABLE grade ADD CONSTRAINT course_id FOREIGN KEY (course_id) REFERENCES course(ID);
 ALTER TABLE course ADD CONSTRAINT lecturer_id FOREIGN KEY (lecturer_ID) REFERENCES lecturer(lecturer_ID);
+
+CREATE ROLE 'admin', 'student', 'teacher';
+GRANT ALL ON * TO 'admin';
+GRANT SELECT ON student TO 'student';
+GRANT SELECT ON course TO 'student';
+GRANT SELECT ON grade TO 'student';
+GRANT SELECT, INSERT, UPDATE, DELETE ON lecturer TO 'teacher';
+GRANT SELECT, INSERT, UPDATE, DELETE ON course TO 'teacher';
+GRANT SELECT, INSERT, UPDATE, DELETE ON grade TO 'teacher';

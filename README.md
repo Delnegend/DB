@@ -101,3 +101,10 @@ SELECT * FROM student WHERE ID IN (
     )
 );
 ```
+
+## Role based access control
+
+- Three roles are available:
+	- `admin`: Administrator, has all permissions
+	- `teacher`: Teachers, has permissions to read and write to tables `lecturer`, `course` and `grade`
+	- `student`: Students, has permissions to read tables `student`, `course` and `grade`
