@@ -5,7 +5,7 @@
 - [x] Find student by any field.
 - [x] Get list of student by year/major/course.
 - [x] Get list of student can apply for scholarship.
-- [ ] Role based access control.
+- [x] Role based access control.
 
 # Initialize the database
 
