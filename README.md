@@ -108,3 +108,10 @@ SELECT * FROM student WHERE ID IN (
 	- `admin`: Administrator, has all permissions
 	- `teacher`: Teachers, has permissions to read and write to tables `lecturer`, `course` and `grade`
 	- `student`: Students, has permissions to read tables `student`, `course` and `grade`
+
+- Create a new user, then grant one of three above roles to said user:
+
+```sql
+CREATE USER '<name>'@'usth' IDENTIFIED BY 'password';
+GRANT '<role> TO '<name>'@'usth';
+```
