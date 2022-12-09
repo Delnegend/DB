@@ -1,4 +1,6 @@
 -- Add to a temporary table to import back to `student_hold` table by first name
+
+DROP TABLE IF EXISTS temporary;
 CREATE TABLE temporary (
     name VARCHAR(50) NOT NULL,
     DOB VARCHAR(10) NOT NULL,
@@ -17,11 +19,9 @@ DROP TABLE temporary;
 UPDATE student_hold
 SET email = CONCAT(YEAR(NOW()), ".", REPLACE(name, " ", ""), ".", DOB, "@school.edu") WHERE INDEX_KEY > 0;
 
--- ID = <enrolled_year>-<index_but_has_prefix_0_if_not_contains_3_digits>
+-- ID = <enrolled_year>-<index_key but add 0 to the front if it doesn't have 3 digits>
 UPDATE student_hold
--- get the last student ID of the current year if exist and increment by 1 for the next student
-SET ID = CONCAT(YEAR(NOW()), "-", LPAD(CAST(SUBSTRING_INDEX(ID, '-', -1) + 1 AS CHAR), 3, '0'))
-WHERE INDEX_KEY > 0 AND ID LIKE CONCAT(YEAR(NOW()), "-%");
+SET ID = CONCAT(YEAR(NOW()), "-", LPAD(INDEX_KEY, 3, "0")) WHERE INDEX_KEY > 0;
 
 -- enroll_year = current year
 UPDATE student_hold

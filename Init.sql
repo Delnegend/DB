@@ -3,10 +3,6 @@ CREATE DATABASE school;
 
 USE school;
 
--- Student can only read their own data and information about the courses/lectures they are enrolled in
--- Teacher can read/write their own data and information about the courses/lectures they are teaching
--- Admin can read/write everything
-
 CREATE TABLE student_hold (
     INDEX_KEY INT NOT NULL AUTO_INCREMENT,
     ID VARCHAR(20),
@@ -35,11 +31,12 @@ CREATE TABLE student (
 CREATE TABLE course (
     ID VARCHAR(50) NOT NULL,
     name VARCHAR(50) NOT NULL,
-    attendence_weight INT NOT NULL,
+    attendance_weight INT NOT NULL,
     midterm_weight INT NOT NULL,
     final_weight INT NOT NULL,
-    lecturer_ID VARCHAR(50) NOT NULL,
+    lecturer_id VARCHAR(50) NOT NULL,
     course_year INT NOT NULL,
+    ETCs INT NOT NULL,
     PRIMARY KEY (ID)
 );
 
@@ -47,29 +44,34 @@ CREATE TABLE grade (
     ID INT NOT NULL AUTO_INCREMENT,
     student_id VARCHAR(8) NOT NULL,
     course_id VARCHAR(50) NOT NULL,
-    attendence INT,
+    attendance INT,
     midterm INT,
     final INT,
     PRIMARY KEY (ID)
 );
 
 CREATE TABLE lecturer (
-    lecturer_ID VARCHAR(50) NOT NULL,
+    lecturer_id VARCHAR(50) NOT NULL,
     name VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
     phone VARCHAR(50) NOT NULL,
-    PRIMARY KEY (lecturer_ID)
+    PRIMARY KEY (lecturer_id)
 );
 
 ALTER TABLE grade ADD CONSTRAINT student_id FOREIGN KEY (student_id) REFERENCES student(ID);
 ALTER TABLE grade ADD CONSTRAINT course_id FOREIGN KEY (course_id) REFERENCES course(ID);
-ALTER TABLE course ADD CONSTRAINT lecturer_id FOREIGN KEY (lecturer_ID) REFERENCES lecturer(lecturer_ID);
+ALTER TABLE course ADD CONSTRAINT lecturer_id FOREIGN KEY (lecturer_id) REFERENCES lecturer(lecturer_id);
 
-CREATE ROLE 'admin', 'student', 'teacher';
-GRANT ALL ON * TO 'admin';
-GRANT SELECT ON student TO 'student';
-GRANT SELECT ON course TO 'student';
-GRANT SELECT ON grade TO 'student';
-GRANT SELECT, INSERT, UPDATE, DELETE ON lecturer TO 'teacher';
-GRANT SELECT, INSERT, UPDATE, DELETE ON course TO 'teacher';
-GRANT SELECT, INSERT, UPDATE, DELETE ON grade TO 'teacher';
+-- create 3 role: admin, lecturer, student
+-- admin has all privileges
+-- lecturer can read all and write to course, grade, lecturer of his/her own
+-- student can only read all
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
+CREATE USER 'lecturer'@'localhost' IDENTIFIED BY 'lecturer';
+CREATE USER 'student'@'localhost' IDENTIFIED BY 'student';
+
+GRANT ALL PRIVILEGES ON school.* TO 'admin'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON school.course TO 'lecturer'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON school.grade TO 'lecturer'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON school.lecturer TO 'lecturer'@'localhost';
+GRANT SELECT ON school.* TO 'student'@'localhost';
