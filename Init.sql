@@ -62,10 +62,6 @@ ALTER TABLE grade ADD CONSTRAINT student_id FOREIGN KEY (student_id) REFERENCES 
 ALTER TABLE grade ADD CONSTRAINT course_id FOREIGN KEY (course_id) REFERENCES course(ID);
 ALTER TABLE course ADD CONSTRAINT lecturer_id FOREIGN KEY (lecturer_id) REFERENCES lecturer(lecturer_id);
 
--- create 3 role: admin, lecturer, student
--- admin has all privileges
--- lecturer can read all and write to course, grade, lecturer of his/her own
--- student can only read all
 CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
 CREATE USER 'lecturer'@'localhost' IDENTIFIED BY 'lecturer';
 CREATE USER 'student'@'localhost' IDENTIFIED BY 'student';

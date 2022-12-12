@@ -137,33 +137,24 @@ SELECT * FROM student WHERE SUBSTRING(ID, 6, 3) = "ICT";
 SELECT * FROM student WHERE ID IN (SELECT student_id FROM student_course WHERE courseid = "12FUN_DATA");
 ```
 
-## Get list of student can apply for scholarship
-- Calculate the average score of each course for each student based on the weight located in the course table
-- Calculate the average score of each student based on the average score of each course
-- Get the list of student whose average score is greater than 15 and no single course score is less than 10
+## Get list of students can apply for scholarship
+GPA >= 15 and no course with grade < 10
 
 ```sql
--- create a temporary table to store the score (from score table) and weight for each score (from course table) of each student
 CREATE TEMPORARY TABLE temp_score AS (
     SELECT student_id, course_id, attendance * attendance_weight / 100 AS attendance, midterm * midterm_weight / 100 AS midterm, final * final_weight / 100 AS final
     FROM grade, course
     WHERE grade.course_id = course.ID
 );
-
--- create a temporary table to store the average score of each course for each student
 CREATE TEMPORARY TABLE temp_avg_score AS (
     SELECT student_id, course_id, (attendance + midterm + final) AS avg_score
     FROM temp_score
 );
-
--- create a temporary table to store the average score of each student
 CREATE TEMPORARY TABLE temp_avg_student_score AS (
     SELECT student_id, AVG(avg_score) AS avg_score
     FROM temp_avg_score
     GROUP BY student_id
 );
-
--- get the list of student can apply for scholarship, including the student ID, name, average score, major and email
 SELECT student.ID, student.name, temp_avg_student_score.avg_score, student.major, student.email
 FROM student, temp_avg_student_score
 WHERE student.ID = temp_avg_student_score.student_id AND temp_avg_student_score.avg_score > 15 AND student.ID NOT IN (
@@ -171,8 +162,32 @@ WHERE student.ID = temp_avg_student_score.student_id AND temp_avg_student_score.
     FROM temp_avg_score
     WHERE avg_score < 10
 );
+DROP TABLE temp_score;
+DROP TABLE temp_avg_score;
+DROP TABLE temp_avg_student_score;
+```
 
--- drop the temporary tables
+## Get a list of students need to retake one or more courses
+Average score < 10, list of courses
+
+```sql
+CREATE TEMPORARY TABLE temp_score AS (
+    SELECT student_id, course_id, attendance * attendance_weight / 100 AS attendance, midterm * midterm_weight / 100 AS midterm, final * final_weight / 100 AS final
+    FROM grade, course
+    WHERE grade.course_id = course.ID
+);
+CREATE TEMPORARY TABLE temp_avg_score AS (
+    SELECT student_id, course_id, (attendance + midterm + final) AS avg_score
+    FROM temp_score
+);
+CREATE TEMPORARY TABLE temp_avg_student_score AS (
+    SELECT student_id, AVG(avg_score) AS avg_score
+    FROM temp_avg_score
+    GROUP BY student_id
+);
+SELECT student.ID, student.name, temp_avg_student_score.avg_score, student.major, student.email, course.name AS course_name
+FROM student, temp_avg_student_score, course, temp_avg_score
+WHERE student.ID = temp_avg_student_score.student_id AND temp_avg_student_score.avg_score < 10 AND student.ID = temp_avg_score.student_id AND temp_avg_score.avg_score < 10 AND course.ID = temp_avg_score.course_id;
 DROP TABLE temp_score;
 DROP TABLE temp_avg_score;
 DROP TABLE temp_avg_student_score;
