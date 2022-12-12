@@ -4,7 +4,8 @@
 - [x] Modify a student/lecturer/course.
 - [x] Find student by any field.
 - [x] Get list of student by year/major/course.
-- [x] Get list of student can apply for scholarship.
+- [x] Get list of student can apply for scholarship. (GPA >= 15, no grade < 10)
+- [x] Get list of student need to retake a course. (grade < 10)
 - [x] Role based access control.
 
 # Requirements
