@@ -9,9 +9,27 @@
 - [x] Role based access control.
 
 # Requirements
-- Admin can read/write to `student`, `lecturer`, `course`, `grade` tables
-- Lecturer can read `student`, `lecturer`, `course`, `grade` tables but can only write to `grade`, `course` and `lecturer` tables that they are in charge of.
-- Student can only read `student`, `lecturer`, `course`, `grade` tables.
+- Admin:
+    - Read/write access:
+        - `student` table: `ID`, `name`, `DOB`, `address`, `gender`, `enroll_year`, `major`, `email`.
+        - `lecturer` table: `lecturer_id`, `name`, `email`, `phone`.
+        - `course` table: `ID`, `name`, `ETCs`, `attendance_weight`, `midterm_weight`, `final_weight`, `lecturer_id`, `course_year`.
+- Lecturer:
+    - Read access:
+        - `student` table: `ID`, `name`, `DOB`, `address`, `gender`, `enroll_year`, `major`, `email`.
+        - `lecturer` table: `lecturer_id`, `name`, `email`, `phone`.
+        - `course` table: `ID`, `name`, `ETCs`, `attendance_weight`, `midterm_weight`, `final_weight`, `lecturer_id`, `course_year`.
+        - `grade` table: `student_id`, `course_id`, `attendance`, `midterm`, `final`.
+    - Write access:
+        - `course` table, entries that have `lecturer_id` equal to their `lecturer_id`: `ID`, `name`, `ETCs`, `attendance_weight`, `midterm_weight`, `final_weight`, `lecturer_id`, `course_year`.
+        - `lecturer` table, entries that have `lecturer_id` equal to their `lecturer_id`: `lecturer_id`, `name`, `email`, `phone`.
+        - `grade` table, entries that have `course_id` of the course that have `lecturer_id` equal to their `lecturer_id`: `student_id`, `course_id`, `attendance`, `midterm`, `final`.
+- Student:
+    - Read access:
+        - `student` table, entries that have `ID` equal to their `ID`: `ID`, `name`, `DOB`, `address`, `gender`, `enroll_year`, `major`, `email`.
+        - `lecturer` table: `lecturer_id`, `name`, `email`, `phone`.
+        - `course` table: `ID`, `name`, `ETCs`, `attendance_weight`, `midterm_weight`, `final_weight`, `lecturer_id`, `course_year`.
+        - `grade` table: `student_id`, `course_id`, `attendance`, `midterm`, `final`.
 
 # Initialize the database and add some sample data
 - `Init.sql`
