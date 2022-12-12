@@ -7,15 +7,15 @@
 - [x] Get list of student can apply for scholarship.
 - [x] Role based access control.
 
-# Initialize the database
+# Requirements
+- Admin can read/write to `student`, `lecturer`, `course`, `grade` tables
+- Lecturer can read `student`, `lecturer`, `course`, `grade` tables but can only write to `grade`, `course` and `lecturer` tables that they are in charge of.
+- Student can only read `student`, `lecturer`, `course`, `grade` tables.
 
+# Initialize the database and add some sample data
 - `Init.sql`
-
-# Features
-## Add a new entry to the tables
-
-### Student
-#### Insert to a temporary table
+## Student
+- Insert to a temporary table
 ```sql
 INSERT INTO student_hold (name, DOB, address, gender, major) VALUES
 ("Trần Thảo Nhật", "7-5-2003", "205 Ninh Bình", "M", "ICT"),
@@ -29,14 +29,10 @@ INSERT INTO student_hold (name, DOB, address, gender, major) VALUES
 ("Phan Khải Hoài", "14-10-2003", "196 Cần Thơ", "M", "CS"),
 ("Nguyễn Khánh Hiếu", "7-7-2003", "232 Phú Yên", "M", "ICT");
 ```
+- `Process.sql`: sort the table by first name, add email, student ID.
+- `Update.sql`: add everything from `student_hold` to `student` table.
 
-#### Process the `student_hold`
-- `Process.sql` (sort by name to add `ID` based on the order and `email`)
-
-#### Add everything back to the main `student` table then clear the temporary table
-- `Update.sql`
-
-### Lecturer
+## Lecturer
 ```sql
 INSERT INTO lecturer (lecturer_id, name, email, phone) VALUES
 ("NVA_ICT_LAB", "Nguyen Van A", "nva@usth.edu.vn", "0123456789"),
@@ -45,7 +41,7 @@ INSERT INTO lecturer (lecturer_id, name, email, phone) VALUES
 ("NVD_FLC", "Nguyen Van D", "nvd@usth.edu.vn", "0123456786");
 ```
 
-### Course
+## Course
 ```sql
 INSERT INTO course (ID, name, ETCs, attendance_weight, midterm_weight, final_weight, lecturer_id, course_year) VALUES
 ("12FUN_DATA", "Fundamental of Database", 3, 10, 30, 60, "NVA_ICT_LAB", 2021),
@@ -55,7 +51,7 @@ INSERT INTO course (ID, name, ETCs, attendance_weight, midterm_weight, final_wei
 ("12ENG_SPK", "English Speaking", 3, 10, 30, 60, "NVD_FLC", 2021);
 ```
 
-### Grade
+## Grade
 ```sql
 INSERT INTO grade (student_id, course_id, attendance, midterm, final) VALUES
 ("2022-001", "12FUN_DATA", 15, 11, 13),
@@ -109,6 +105,8 @@ INSERT INTO grade (student_id, course_id, attendance, midterm, final) VALUES
 ("2022-010", "12ENG_LIS", 14, 10, 10),
 ("2022-010", "12ENG_SPK", 11, 20, 14);
 ```
+
+# Features
 
 ## Delete an entry from the tables
 ```sql
